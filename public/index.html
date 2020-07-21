@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+        <meta name="theme-color" content="#000000" />
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  
+  <script>
+
+ var exData = [{
+  id: "loc1",
+  parent: "#",
+  text: "Location 1"
+}, {
+  id: "loc2",
+  parent: "#",
+  text: "Location 2"
+}, {
+  id: "italy-1",
+  parent: "loc2",
+  text: "Italy",
+  icon: "fa fa-flag"
+}, {
+  id: "poland-1",
+  parent: "loc2",
+  text: "Poland",
+  icon: "fa fa-flag"
+}];
+
+function makeTreeItem(el) {
+  return $("<a>", {
+    id: $(el).attr("id") + "_anchor",
+    class: "jstree-anchor",
+    href: "#"
+  });
+}
+
+$(function() {
+  $('#tree').jstree({
+    core: {
+      check_callback: true,
+      data: exData
+    },
+    types: {
+      root: {
+        icon: "fa fa-sort-desc"
+      }
+    },
+    plugins: ["dnd", "types"]
+  });
+  $('#tagList li').draggable({
+    cursor: 'move',
+    helper: 'clone',
+    start: function(e, ui) {
+      var item = $("<div>", {
+        id: "jstree-dnd",
+        class: "jstree-clicked"
+      });
+      $("<i>", {
+        class: "jstree-clicked jstree-er"
+      }).appendTo(item);
+      item.append($(this).text());
+      var idRoot = $(this).attr("id").slice(0, -2);
+      var newId = idRoot + "-" + ($("#tree [id|='" + idRoot + "'][class*='jstree-node']").length + 1);
+      return $.vakata.dnd.start(e, {
+        jstree: true,
+        obj: makeTreeItem(this),
+        nodes: [{
+          id: newId,
+          text: $(this).text(),
+          icon: "fa fa-flag-o"
+        }]
+      }, item);
+    }
+  });
+});
+
+
+  </script>
+  
+
+  <title>drag-drop</title>
+ 
+  <style>
+    div.orgChart div.node {
+background-color: aqua;
+    }
+  </style>
+</head>
+  <body>
+    
+    <div id="root"></div>
+  
+      <div  class="w3-sidebar w3-light-grey w3-bar-block aside" style="width:25%">
+        
+        <div class="ui-widget ">
+      
+          <div id="tagList">
+            <ul >
+              <li data-tag="1" id="uk-1">United Kingdom</li>
+               <li data-tag="2" id="france-1">France</li>
+               <li data-tag="3" id="germany-1">Germany</li>
+               <li data-tag="4" id="spain-1">Spain</li>
+               <li data-tag="5" id="india-1">India</li>
+
+
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+      
+      <div style="margin-left:25%">
+      
+      <div class="w3-container w3-black">
+        <div class="row1"></div>
+      </div>
+      
+     
+      <div class="w3-container">
+        
+        <div id="tree">
+          
+        </div>
+
+      </div>
+      
+      </div>
+            
+    
+  </body>
+  
+</html>
